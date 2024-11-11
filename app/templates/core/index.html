@@ -9,6 +9,14 @@
 {% block content %}
 
     <div>
+        <h4>Currently registered people</h4>
+
+        <ul>
+            {% for person in people %}
+                <li>{{ person }}</li>
+            {% endfor %}
+        </ul>
+
         <a href="{{ url_for('login') }}">Login</a>
         <a href="{{ url_for('register') }}">Register</a>
     </div>

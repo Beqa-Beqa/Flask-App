@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager
 
 db = SQLAlchemy()
 
@@ -10,6 +11,15 @@ def create_app():
     app.secret_key = 'MY SECRET KEY'
     
     db.init_app(app)
+    
+    login_manager = LoginManager(app)
+    # login_manager.init_app(app)
+    
+    from .models import User
+    
+    @login_manager.user_loader
+    def load_user(uid):
+        return User.query.get(uid)
     
     from .routes import register_routes
     register_routes(app, db)
