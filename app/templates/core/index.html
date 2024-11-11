@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename=styles) }}">
+{% endblock %}
+
+{% block pagename %} Homepage {% endblock %}
+
+{% block content %}
+
+    <div>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+    </div>
+    
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename=script) }}"></script>
+{% endblock %}

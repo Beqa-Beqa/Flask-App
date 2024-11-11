@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title>{% block title %}Homepage{% endblock %}</title>
+
+    <!-- Styles -->
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Page name -->
+    <h1>{% block pagename %}Index{% endblock %}</h1>
+
+    <!-- Content -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>
