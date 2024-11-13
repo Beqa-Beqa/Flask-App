@@ -6,7 +6,7 @@ def register_routes(app, db):
     @app.route('/')
     def index():
         if current_user.is_authenticated:
-            return current_user.username
+            return render_template('authenticated/index.html', styles='css/index.css')
         else:
             people = User.query.all()
             return render_template('core/index.html', script='scripts/index.js', styles='css/index.css', people=people)
@@ -38,11 +38,10 @@ def register_routes(app, db):
             password = request.form.get('password')
             
             user = User.query.filter_by(username=username, password=password).one_or_none()
-            print(user)
             
             if user: login_user(user)
                 
-            return f'Success login {current_user.username}'
+            return redirect(url_for('index'))
         
     
     @app.route('/logout', methods=['GET', 'POST'])

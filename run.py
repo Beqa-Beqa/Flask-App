@@ -1,4 +1,4 @@
-from app.app import create_app
+from app import create_app
 
 # If this file is run, then run the flask application
 # We need run.py to avoid circular imports ( if it occurs, app will crash )
