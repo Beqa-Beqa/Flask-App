@@ -1,12 +1,15 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required
-from .models import User
+from .models import User, Post
 
 def register_routes(app, db):
     @app.route('/')
     def index():
         if current_user.is_authenticated:
-            return render_template('authenticated/index.html', styles='css/index.css')
+            posts = Post.query.all()
+            own_posts = Post.query.filter_by(owner_id=current_user.uid).all()
+            print(own_posts)
+            return render_template('authenticated/index.html', styles='css/index.css', posts=posts)
         else:
             people = User.query.all()
             return render_template('core/index.html', script='scripts/index.js', styles='css/index.css', people=people)
@@ -39,12 +42,27 @@ def register_routes(app, db):
             
             user = User.query.filter_by(username=username, password=password).one_or_none()
             
-            if user: login_user(user)
-                
-            return redirect(url_for('index'))
+            if user: 
+                login_user(user)
+                return redirect(url_for('index'))
+            else:
+                return 'Invalid credentials'
         
     
-    @app.route('/logout', methods=['GET', 'POST'])
+    @app.route('/logout', methods=['POST'])
     def logout():
         logout_user()
-        return 'Success logout'
+        return redirect(url_for('login'))
+    
+    
+    @app.route('/create-post', methods=['POST'])
+    def create_post():
+        title = request.form.get('title')
+        content = request.form.get('content')
+        
+        new_post = Post(title=title, content=content, owner_id=current_user.uid)
+        
+        db.session.add(new_post)
+        db.session.commit()
+        
+        return redirect(url_for('index'))

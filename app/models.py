@@ -14,3 +14,19 @@ class User(db.Model, UserMixin):
     
     def get_id(self):
         return self.uid
+    
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+    
+    pid = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    content = db.Column(db.String, nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.uid'), nullable=False)
+    owner = db.relationship('User', backref='posts')
+    
+    def __repr__(self) -> str:
+        return f'Post(title={self.title}, content={self.content}, owner_id={self.owner_id})'
+    
+    def get_id(self):
+        return self.pid
