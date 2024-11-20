@@ -4,3 +4,11 @@ body {
     flex-flow: column;
     align-items: center;
 }
+
+.user-post {
+    display: block;
+    background-color: #f4f4f4;
+    border-radius: 15px;
+    padding: .5rem 2rem;
+    margin-bottom: .5rem;
+}

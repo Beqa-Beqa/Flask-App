@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from .models import User, Post
 
@@ -8,7 +8,6 @@ def register_routes(app, db):
         if current_user.is_authenticated:
             posts = Post.query.all()
             own_posts = Post.query.filter_by(owner_id=current_user.uid).all()
-            print(own_posts)
             return render_template('authenticated/index.html', styles='css/index.css', posts=posts)
         else:
             people = User.query.all()
@@ -29,7 +28,7 @@ def register_routes(app, db):
             db.session.add(new_user)
             db.session.commit()
             
-            return redirect(url_for('index'))
+            return jsonify({ 'message': 'User registered successfully' })
 
 
     @app.route('/login',  methods=['GET', 'POST'])
@@ -52,7 +51,7 @@ def register_routes(app, db):
     @app.route('/logout', methods=['POST'])
     def logout():
         logout_user()
-        return redirect(url_for('login'))
+        return '', 200
     
     
     @app.route('/create-post', methods=['POST'])
@@ -66,3 +65,15 @@ def register_routes(app, db):
         db.session.commit()
         
         return redirect(url_for('index'))
+    
+    
+    @app.route('/delete-post', methods=['DELETE'])
+    def delete_post():
+        data = request.json
+        
+        if data:
+            pid = data.get('pid')
+            Post.query.filter_by(pid=pid).delete()
+            db.session.commit()
+            
+        return '', 200

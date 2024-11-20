@@ -20,14 +20,30 @@
 
     <ul>
         {% for post in posts %}
-            <li>{{ post }}</li>
+            <li class="user-post">
+                <div class="user-post-container">
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.content }}</p>
+                    <button onclick="deletePost( '{{post.pid}}' )">Delete</button>
+                </div>
+            </li>
         {% endfor %}
     </ul>
 
     <script type="text/javascript">
         const logout = async () => {
-            await fetch("{{ url_for('logout') }}", { method: 'POST' });
-            window.location.reload();
+            fetch("{{ url_for('logout') }}", { method: 'POST' });
+        }
+
+        const deletePost = async (pid) => {
+            const result = await fetch("{{ url_for('delete_post') }}", {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ pid })
+            });
+            if (result.ok) {
+                window.location.reload()
+            }
         }
     </script>
 {% endblock content %}
